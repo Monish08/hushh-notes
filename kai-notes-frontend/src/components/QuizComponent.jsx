@@ -72,7 +72,7 @@ export default function QuizComponent({ quiz, onSubmit }) {
                               : isWrong
                               ? "bg-red-500/20 border-red-500 text-red-300"
                               : isSelected
-                              ? "bg-indigo-500/30 border-indigo-400 text-white"
+                              ? "bg-indigo-600 border-indigo-400 text-white ring-2 ring-indigo-400"
                               : "bg-gray-700 border-gray-600 text-gray-300 hover:border-indigo-400 hover:bg-gray-600"
                           }`}
                         >
@@ -161,4 +161,5 @@ export default function QuizComponent({ quiz, onSubmit }) {
       )}
     </div>
   );
+
 }
