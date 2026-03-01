@@ -6,8 +6,8 @@ import CreateClassroom from "./pages/CreateClassroom";
 import JoinClassroom from "./pages/JoinClassroom";
 import Classroom from "./pages/Classroom";
 import InviteJoin from "./pages/InviteJoin";
-import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   return (
@@ -19,6 +19,8 @@ export default function App() {
         {/* Auth Routes */}
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+       
 
         {/* Dashboard */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
