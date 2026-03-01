@@ -11,38 +11,31 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-  const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-    if (!currentUser) {
-      navigate("/signin");
-      return;
-    }
-
-    setUser(currentUser);
-
-    try {
-      const createdQuery = query(
-        collection(db, "classrooms"),
-        where("createdBy", "==", currentUser.uid)
-      );
-
-      const createdSnap = await getDocs(createdQuery);
-
-      const created = createdSnap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        role: "teacher",
-      }));
-
-      setClassrooms(created);
-    } catch (err) {
-      console.error(err);
-    }
-
-    setLoading(false);
-  });
-
-  return () => unsubscribe();
-}, [navigate]);
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        navigate("/signin");
+        return;
+      }
+      setUser(currentUser);
+      try {
+        const createdQuery = query(
+          collection(db, "classrooms"),
+          where("createdBy", "==", currentUser.uid)
+        );
+        const createdSnap = await getDocs(createdQuery);
+        const created = createdSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          role: "teacher",
+        }));
+        setClassrooms(created);
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
   const handleSignOut = async () => {
     await signOut(auth);
@@ -54,19 +47,19 @@ export default function Dashboard() {
       {/* Navbar */}
       <nav className="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-indigo-400"> Kai Notes</h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <Link
-    to="/admin"
-    className="text-sm bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded-lg transition"
-  >
-     Admin
-  </Link>
-          <span className="text-sm text-gray-400">
+            to="/admin"
+            className="px-3 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 border border-gray-600 text-sm text-gray-300 transition"
+          >
+             Admin
+          </Link>
+          <span className="text-sm text-gray-300 bg-gray-700 border border-gray-600 px-3 py-1.5 rounded-lg">
             {user?.displayName || user?.email}
           </span>
           <button
             onClick={handleSignOut}
-            className="text-sm text-red-400 hover:text-red-300 transition"
+            className="px-3 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 border border-gray-600 text-sm text-gray-300 hover:text-white transition"
           >
             Sign Out
           </button>
@@ -92,35 +85,27 @@ export default function Dashboard() {
           >
             <div className="text-3xl mb-2">➕</div>
             <p className="font-semibold text-lg">Create Classroom</p>
-            <p className="text-sm text-indigo-300 mt-1">
-              Upload notes & generate quiz
-            </p>
+            <p className="text-sm text-indigo-300 mt-1">Upload notes & generate quiz</p>
           </Link>
-
           <Link
             to="/join"
             className="bg-gray-700 hover:bg-gray-600 transition rounded-xl p-6 text-center border border-gray-600"
           >
             <div className="text-3xl mb-2">🚪</div>
             <p className="font-semibold text-lg">Join Classroom</p>
-            <p className="text-sm text-gray-400 mt-1">
-              Enter class code to join
-            </p>
+            <p className="text-sm text-gray-400 mt-1">Enter class code to join</p>
           </Link>
         </div>
 
         {/* Classrooms */}
         <div>
           <h3 className="text-lg font-semibold mb-4">Your Classrooms</h3>
-
           {loading ? (
             <p className="text-gray-400">Loading...</p>
           ) : classrooms.length === 0 ? (
             <div className="bg-gray-800 rounded-xl p-8 text-center border border-gray-700">
               <p className="text-gray-400">No classrooms yet.</p>
-              <p className="text-sm text-gray-500 mt-1">
-                Create one or join with a code!
-              </p>
+              <p className="text-sm text-gray-500 mt-1">Create one or join with a code!</p>
             </div>
           ) : (
             <div className="grid gap-4">
@@ -128,23 +113,17 @@ export default function Dashboard() {
                 <Link
                   key={cls.id}
                   to={`/classroom/${cls.id}`}
-                  className="bg-gray-800 hover:bg-gray-750 border border-gray-700 rounded-xl p-5 flex items-center justify-between transition hover:border-indigo-500"
+                  className="bg-gray-800 border border-gray-700 rounded-xl p-5 flex items-center justify-between transition hover:border-indigo-500"
                 >
                   <div>
-                    <p className="font-semibold">{cls.name || cls.id}</p>
+                    <p className="font-semibold">{cls.subject || cls.name || cls.id}</p>
                     <p className="text-sm text-gray-400 mt-1">
-                      Code:{" "}
-                      <span className="font-mono text-indigo-400">{cls.id}</span>
+                      Code: <span className="font-mono text-indigo-400">{cls.id}</span>
+                      {cls.semester && <span className="ml-2 text-gray-500">{cls.semester}</span>}
                     </p>
                   </div>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      cls.role === "teacher"
-                        ? "bg-indigo-500/20 text-indigo-300"
-                        : "bg-green-500/20 text-green-300"
-                    }`}
-                  >
-                    {cls.role === "teacher" ? "👨‍🏫 Teacher" : "👨‍🎓 Student"}
+                  <span className="text-xs px-2 py-1 rounded-full bg-indigo-500/20 text-indigo-300">
+                    👨‍🏫 Teacher
                   </span>
                 </Link>
               ))}
