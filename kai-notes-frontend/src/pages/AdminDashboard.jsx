@@ -97,7 +97,7 @@ export default function AdminDashboard() {
       <div className="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-indigo-400">
-             Kai Notes Admin
+             Hushh-Notes Admin
           </h1>
         </div>
 
@@ -199,4 +199,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
 
