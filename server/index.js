@@ -12,7 +12,9 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 },
 });
 
-app.use(cors());
+app.use(cors({
+    origin: "*",
+  }));
 app.use(express.json());
 
 const QUIZ_PROMPT = `
@@ -150,4 +152,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`🔑 Mistral API key: ${process.env.MISTRAL_API_KEY ? "✅ loaded" : "❌ MISSING"}`);
+
 });
