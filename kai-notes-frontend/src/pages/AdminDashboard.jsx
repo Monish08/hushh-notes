@@ -141,9 +141,6 @@ export default function AdminDashboard() {
                 <strong>{stats.totalQuizAttempts}</strong> quiz
                 attempts
               </p>
-              <p className="text-gray-500 text-xs mt-1">
-                (Use this line during your demo pitch!)
-              </p>
             </div>
 
             {/* Classrooms Table */}
@@ -202,3 +199,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
