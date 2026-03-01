@@ -11,32 +11,38 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const currentUser = auth.currentUser;
+  const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+    if (!currentUser) {
+      navigate("/signin");
+      return;
+    }
+
     setUser(currentUser);
 
-    const fetchClassrooms = async () => {
-      try {
-        // Classrooms created by user
-        const createdQuery = query(
-          collection(db, "classrooms"),
-          where("createdBy", "==", currentUser.uid)
-        );
-        const createdSnap = await getDocs(createdQuery);
-        const created = createdSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          role: "teacher",
-        }));
+    try {
+      const createdQuery = query(
+        collection(db, "classrooms"),
+        where("createdBy", "==", currentUser.uid)
+      );
 
-        setClassrooms(created);
-      } catch (err) {
-        console.error(err);
-      }
-      setLoading(false);
-    };
+      const createdSnap = await getDocs(createdQuery);
 
-    fetchClassrooms();
-  }, []);
+      const created = createdSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        role: "teacher",
+      }));
+
+      setClassrooms(created);
+    } catch (err) {
+      console.error(err);
+    }
+
+    setLoading(false);
+  });
+
+  return () => unsubscribe();
+}, [navigate]);
 
   const handleSignOut = async () => {
     await signOut(auth);
@@ -47,8 +53,14 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Navbar */}
       <nav className="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-indigo-400">🎓 Kai Notes</h1>
+        <h1 className="text-xl font-bold text-indigo-400"> Kai Notes</h1>
         <div className="flex items-center gap-4">
+          <Link
+    to="/admin"
+    className="text-sm bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded-lg transition"
+  >
+     Admin
+  </Link>
           <span className="text-sm text-gray-400">
             {user?.displayName || user?.email}
           </span>
