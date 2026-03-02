@@ -5,9 +5,10 @@ npm-debug.log
 # Env files
 .env
 .env.local
-
+serviceAccountKey.json
 # Vite
 dist/
 
 # OS
+
 .DS_Store
