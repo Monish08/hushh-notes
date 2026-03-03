@@ -102,18 +102,3 @@ Hushh-Notes converts passive notes into active competitive learning.
 
 ---
 
-## 🔐 Security & Controls
-
-- One attempt per user (UID-based enforcement)
-- Admin route restricted by email
-- Backend file size limits
-- AI JSON validation before database write
-- Protected routes with authentication guards
-
-
-
-
-
-## 📌 License
-
-Built for educational and hackathon purposes.
